@@ -1,0 +1,8 @@
+---
+title: "Untitled"
+author: "Americo"
+date: "20 luglio 2015"
+output: html_document
+---
+
+setwd("/Users/Americo/Documents/Education/Data_science/Coursera/Statinference/project/ass2_statinference")

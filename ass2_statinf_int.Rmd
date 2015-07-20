@@ -2,7 +2,7 @@
 title: "Tooth Growth Analysis"
 author: "Americo"
 date: "19 luglio 2015"
-output: pdf_document
+output: html_document
 ---
 
 ##Utils
@@ -10,7 +10,9 @@ output: pdf_document
 require(dplyr)
 require(ggplot2)
 require(datasets)
+require(tidyr)
 options(digits = 3)
+setwd("/Users/Americo/Documents/Education/Data_science/Coursera/Statinference/project/ass2_statinference")
 ```
 ##Goals
 Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
@@ -25,17 +27,38 @@ Were the results of the tests and/or intervals interpreted in the context of the
 Did the student describe the assumptions needed for their conclusions?
 
 ##Dataset
-Carico il dataset e ne studio le variabili tramite il codebook
+Loading the dataset and studying the variables through the codebook and some initial exploration.
 ```{r loading dataset}
 data(ToothGrowth)
 ?ToothGrowth
+head(ToothGrowth)
+tail(ToothGrowth)
+dim(ToothGrowth)
+str(ToothGrowth)
 ```
+
+The dataset is composed by measurements on 10 pigs regarding the length of teeth (variable `len`) after the somministration of three different dose of vitamin (the variable `dose`) and two delivery methods (orange juice or ascorbic acid - the variable `supp`).
+There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one.
 
 ##Exploratory data analysis
-Esploro il dataset: le dimensioni, i missing values, le distribuzioni univariate, le statistiche di base
-```{r first exploration}
-```
+Esploro il dataset: le dimensioni, i missing values, le distribuzioni univariate, le statistiche di base (boxplot condizionati ai fattori, ecc)
 
+
+##Data manipulation
+I will try to check if a manipulation of the dataset can be useful for my analysis
+```{r manipulation}
+myToothGrowth <- ToothGrowth
+mydfs <- list()
+j <- 1:10
+for (i in 1:6) {
+        mydfs[[i]] <- myToothGrowth[j,]
+        names(mydfs[[i]]) <- c(paste("len", i), paste("supp", i),paste("dose", i))
+        j <- j + 10
+}
+myToothGrowth2 <- cbind(mydfs[[1]], mydfs[[2]],mydfs[[3]],mydfs[[4]],mydfs[[5]],mydfs[[6]])
+myToothGrowth2$pig_id <- 1:10
+
+```
 
 ##Statistical analysis
 
