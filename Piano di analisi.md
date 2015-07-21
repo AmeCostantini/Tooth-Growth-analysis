@@ -3,13 +3,17 @@
 ##Analysis Plan
 
 
-### Exploratory analysis
+### Exploratory analysis `?V`
 
-* univariate graphs on all the population
+* barcharts for dose and supp (`r barcharts`) `v`
 
-* biviariate and multivariate box plot
+* univariate graphs on all the population (`r first histogram`) `v`
 
-###Data Manipulation `v`
+* biviariate and multivariate box plot (`r conditional boxplots`) `v`
+
+
+###Data Manipulation `V`
+
 
 ###Statistical analysis
 
