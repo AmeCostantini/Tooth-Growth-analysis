@@ -9,7 +9,7 @@
 
 * biviariate and multivariate box plot
 
-###Data Manipulation
+###Data Manipulation `v`
 
 ###Statistical analysis
 
