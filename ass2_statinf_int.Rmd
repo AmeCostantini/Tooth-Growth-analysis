@@ -55,8 +55,9 @@ for (i in 1:6) {
         names(mydfs[[i]]) <- c(paste("len", i), paste("supp", i),paste("dose", i))
         j <- j + 10
 }
-myToothGrowth2 <- cbind(mydfs[[1]], mydfs[[2]],mydfs[[3]],mydfs[[4]],mydfs[[5]],mydfs[[6]])
+myToothGrowth2 <- bind_cols(mydfs)
 myToothGrowth2$pig_id <- 1:10
+
 
 ```
 
