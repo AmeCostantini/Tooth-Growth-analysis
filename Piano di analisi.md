@@ -17,7 +17,7 @@
 
 ###Statistical analysis
 
-* check for normality of population (graphically)
+* check for normality of population (graphically) `x`=> sto fermo qui per un issue.
 
 * performing tests
 
