@@ -2,7 +2,7 @@
 title: "Tooth Growth Analysis"
 author: "Americo"
 date: "19 luglio 2015"
-output: pdf_document
+output: html_document
 ---
 
 ##Utils
@@ -35,6 +35,7 @@ head(ToothGrowth)
 tail(ToothGrowth)
 dim(ToothGrowth)
 str(ToothGrowth)
+myToothGrowth <- ToothGrowth
 ```
 
 The dataset is composed by measurements on 10 pigs regarding the length of teeth (variable `len`) after the somministration of three different dose of vitamin (the variable `dose`) and two delivery methods (orange juice or ascorbic acid - the variable `supp`).
@@ -79,7 +80,6 @@ Almost all population are quiete symmetrical, which is good for our further anal
 I want to create a dataframe with 7 variables, the 6 measurements and the ID of the subjects. It seems to me the better way to flexibly perform t-tests.
 
 ```{r manipulation}
-myToothGrowth <- ToothGrowth
 mydfs <- list()
 j <- 1:10
 for (i in 1:6) {
@@ -105,9 +105,69 @@ My idea is:
 * to compare lengths derived from different doses given with the same delivery method, to see if bigger dose (as we expect) related to bigger length;
 * to compare same doses given with different delivery methods, to see if different delivery method relates to different length (looking at the boxplots, i think it worth considering the dose 0.5 and 1, which seems the ones with bigger difference between lengths distributions and their averages).
 
-But first of all I need to perform some check on normality of differences, although the size is very very small.
+But first of all I need to perform some check on normality of differences, although the size is very very small. Naming convention is: $VC_1_05 = supp VC dose 1 - supp Vc dose 0.5$
 
-```{r differences check}
+```{r difference dataframe}
+myToothGrowth_diff <- data.frame (
+        lenVC_1_05 = myToothGrowth3$lenVC_1 - myToothGrowth3$lenVC_05,
+        lenVC_2_1 = myToothGrowth3$lenVC_2 - myToothGrowth3$lenVC_1,
+        lenVC_2_05 = myToothGrowth3$lenVC_2 - myToothGrowth3$lenVC_05,
+        lenOJ_1_05 = myToothGrowth3$lenOJ_1 - myToothGrowth3$lenOJ_05,
+        lenOJ_2_1 = myToothGrowth3$lenOJ_2 - myToothGrowth3$lenOJ_1,
+        lenOJ_2_05 = myToothGrowth3$lenOJ_2 - myToothGrowth3$lenOJ_05,
+        lenVC_OJ_05 = myToothGrowth3$lenOJ_05 - myToothGrowth3$lenVC_05,
+        lenVC_OJ_1 = myToothGrowth3$lenOJ_1 - myToothGrowth3$lenVC_1,
+        lenVC_OJ_2 = myToothGrowth3$lenOJ_2 - myToothGrowth3$lenVC_2)
+
+head(myToothGrowth_diff)
+```
+
+Now let's plot differences and see. I will adjust the binwidth in order to approximate as best as I can normality.
+
+```{r differences plot, fig.height=5, fig.width=7.5}
+toothnormalplot1 <- function(mydf,bin, supp, doseup, dosedown) {  
+        myx_str  <- sprintf("len%s_%s_%s", supp, doseup, dosedown)
+        myx <- gsub('"','',myx_str)
+        mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
+        ggplot(data = mydf, aes(x = myx)) +
+        geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
+        ggtitle(label = mytitle)
+}
+
+toothnormalplot1(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 2, dosedown = 1)
 
 
+#questo è il grafico che funziona ma la funzione non gira come vorrei. credo perché myx è carattere, comunque il problema è li.
+ggplot(data = myToothGrowth_diff, aes(x = lenVC_1_05))+
+        geom_histogram(binwidth=3, colour = "black", fill = "gray") +
+        ggtitle("length difference between dose 1 and 05 given with VC")
+
+```
+
+
+```{r function for t plotting}
+tplot <- function(dof, tstat, conflev, two = TRUE) {
+        myx <- seq(-4, 4, length=100)
+        hx <- dnorm(myx)
+        degf <- dof
+        mydf <- data.frame (myx, myy = dt(myx, degf))
+        pcum <- ifelse(two == TRUE, conflev+((1-conflev)/2), conflev)
+        tcrit  <- qt(p = pcum, df = dof)
+        if (two == TRUE) {
+                g1 <- ggplot(mydf, aes(myx, myy)) +
+                geom_line(size = 1.2, colour = "black") +
+                geom_vline(xintercept = c(-tcrit, tcrit, tstat), colour = c("red", "red", "blue"), size = 0.9) +
+                ggtitle(paste("Hypothesis testing for t =", tstat ))
+        return(g1)
+        } else {
+                g2 <- ggplot(mydf, aes(myx, myy)) +
+                geom_line(size = 1.2, colour = "black") +
+                geom_vline(xintercept = c(tcrit, tstat), colour = c("red", "blue"), size = 0.9) +
+                ggtitle(paste("Hypothesis testing for t =", tstat ))
+                return(g2)
+        }
+}
+tplot(dof = 9, tstat = 1.2, conflev = 0.95, two = TRUE)
+#da perfezionare il grafico per test a due code
+```
 ##Conclusions
