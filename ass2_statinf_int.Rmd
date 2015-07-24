@@ -125,36 +125,7 @@ head(myToothGrowth_diff)
 Now let's plot differences and see. I will adjust the binwidth in order to approximate as best as I can normality.
 
 ```{r differences plot, fig.height=5, fig.width=7.5}
-
-#versione 1, quella che da più problemi
-toothnormalplot1 <- function(mydf,bin, supp, doseup, dosedown) {  
-        myx_str  <- sprintf("len%s_%s_%s", supp, doseup, dosedown)
-        myx <- eval(parse(text = myx_str))
-        mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
-        ggplot(data = mydf, aes(x = eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown))))) +
-        geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
-        ggtitle(label = mytitle)
-}
-
-toothnormalplot1(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 2, dosedown = 1)
-
-######################## versione 2, quella che fuori dalla funzione funziona.
-lenOJ_2_1
-eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
-
-toothnormalplot2 <- function(mydf, bin, supp, doseup, dosedown) {  
-        mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
-        myx <- eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
-        g1 <- ggplot(data = mydf, aes(x = eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown))))) +
-                geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
-                ggtitle(label = mytitle)
-        return(g1)
-}
-toothnormalplot2(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 2, dosedown = 1)
-toothnormalplot2(mydf = myToothGrowth_diff, bin = 3, supp = "VC", doseup = 2, dosedown = 1)
-
-####################### versione 3
-toothnormalplot3 <- function(mydf, bin, supp, doseup, dosedown) {
+toothnormalplot <- function(mydf, bin, supp, doseup, dosedown) {
         attach(mydf)
         mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
         mydf$myx <- eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
@@ -166,30 +137,10 @@ toothnormalplot3 <- function(mydf, bin, supp, doseup, dosedown) {
         detach(mydf)
 }
 
-toothnormalplot3(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = "2", dosedown = "05")
+toothnormalplot(mydf = myToothGrowth_diff, bin = 3, supp = "VC", doseup = "2", dosedown = "05")
 
 
 
-supp <- "OJ"
-doseup <- 2
-dosedown <- 1
-bin <- 3
-mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
-mydf <- myToothGrowth_diff
-
-ggplot(data = mydf, aes(x = eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown))))) +
-        geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
-        ggtitle(label = mytitle)
-
-
-attach(what = myToothGrowth_diff)
-eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
-detach(name = myToothGrowth_diff)
-
-#questo è il grafico che funziona ma la funzione non gira come vorrei. credo perché myx è carattere, comunque il problema è li.
-ggplot(data = myToothGrowth_diff, aes(x = lenVC_1_05))+
-        geom_histogram(binwidth=3, colour = "black", fill = "gray") +
-        ggtitle("length difference between dose 1 and 05 given with VC")
 
 ```
 
