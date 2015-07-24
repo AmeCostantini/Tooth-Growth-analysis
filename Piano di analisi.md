@@ -21,14 +21,15 @@
 
 * performing tests `x`=> i have defined the template for all the tests, performing the first one. it works very well
 
-* creating plots (maybe with a function) related to tests (see http://www.statmethods.net/advgraphs/probability.html for further help) `x`
+* creating plots (maybe with a function) related to tests (see http://www.statmethods.net/advgraphs/probability.html for further help) `v`
 
 * drawing conclusions.
 
+###Review
 
-### rendering
-* plot dimensions
-* messages of codes
+### Rendering
+* plot dimensions `v`
+* messages of codes `v`
 * pdf rendering bug fixing
 
 
