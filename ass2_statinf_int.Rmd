@@ -39,12 +39,12 @@ myToothGrowth <- ToothGrowth
 ```
 
 The dataset is composed by measurements on 10 pigs regarding the length of teeth (variable `len`) after the somministration of three different dose of vitamin (the variable `dose`) and two delivery methods (orange juice or ascorbic acid - the variable `supp`).
-There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one.
 
 ##Exploratory data analysis
 
 How delivery methods and doses are distributed?
 
+There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one.
 ```{r barcharts, fig.height=5, fig.width=7.5}
 ggplot(data = myToothGrowth, aes(x = supp, fill = factor(dose))) +
         geom_bar(width = 0.5) +
@@ -144,11 +144,31 @@ eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
 
 toothnormalplot2 <- function(mydf, bin, supp, doseup, dosedown) {  
         mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
-        ggplot(data = mydf, aes(x = eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown))))) +
-        geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
-        ggtitle(label = mytitle)
+        myx <- eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
+        g1 <- ggplot(data = mydf, aes(x = eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown))))) +
+                geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
+                ggtitle(label = mytitle)
+        return(g1)
 }
 toothnormalplot2(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 2, dosedown = 1)
+toothnormalplot2(mydf = myToothGrowth_diff, bin = 3, supp = "VC", doseup = 2, dosedown = 1)
+
+####################### versione 3
+toothnormalplot3 <- function(mydf, bin, supp, doseup, dosedown) {
+        attach(mydf)
+        mytitle <- sprintf("length difference between dose %s and %s given with %s", doseup, dosedown, supp)
+        mydf$myx <- eval(parse(text = sprintf("len%s_%s_%s", supp, doseup, dosedown)))
+        g1 <- ggplot(data = mydf, aes(x = myx)) +
+                geom_histogram(binwidth = bin, colour = "black", fill = "gray") +
+                ggtitle(label = mytitle) +
+                xlab(label = sprintf("len%s_%s_%s", supp, doseup, dosedown))
+        return(g1)
+        detach(mydf)
+}
+
+toothnormalplot3(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = "2", dosedown = "05")
+
+
 
 supp <- "OJ"
 doseup <- 2
