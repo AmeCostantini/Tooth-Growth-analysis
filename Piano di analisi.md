@@ -3,7 +3,7 @@
 ##Analysis Plan
 
 
-### Exploratory analysis `?V`
+### Exploratory analysis `V`
 
 * barcharts for dose and supp (`r barcharts`) `v`
 
@@ -17,13 +17,19 @@
 
 ###Statistical analysis
 
-* check for normality of population (graphically) `x`=> sto fermo qui per un issue.
+* check for normality of population (graphically) `v`
 
-* performing tests
+* performing tests `x`=> i have defined the template for all the tests, performing the first one. it works very well
 
-* creating plots (maybe with a function) related to tests (see http://www.statmethods.net/advgraphs/probability.html for further help);
+* creating plots (maybe with a function) related to tests (see http://www.statmethods.net/advgraphs/probability.html for further help) `x`
 
 * drawing conclusions.
+
+
+### rendering
+* plot dimensions
+* messages of codes
+* pdf rendering bug fixing
 
 
 
