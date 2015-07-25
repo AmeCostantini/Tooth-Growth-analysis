@@ -47,7 +47,7 @@ The dataset is composed by measurements on 10 pigs regarding the length of teeth
 How delivery methods and doses are distributed?
 
 There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one.
-```{r barcharts, fig.height=5, fig.width=7.5}
+```{r barcharts, fig.height=3, fig.width=7.5}
 ggplot(data = myToothGrowth, aes(x = supp, fill = factor(dose))) +
         geom_bar(width = 0.5) +
         guides(fill=guide_legend(reverse=TRUE)) +
@@ -67,7 +67,7 @@ ggplot(data = myToothGrowth, aes(x = len)) +
 I don't know if this kind of exploration makes sense, because this 60 observations are not really *a population*, are much more the sum of 6 different "snapshot"" of a population.
 Let's plot them so.
 
-```{r conditional boxplots, fig.height=5, fig.width=7.5}
+```{r conditional boxplots, fig.height=3.5, fig.width=7.5}
 ggplot(data = myToothGrowth, aes(x = factor(dose), y = len)) +
         geom_boxplot() +
         facet_wrap(~supp) +
@@ -156,7 +156,7 @@ g5 <- toothnormalplot(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 
 g6 <- toothnormalplot(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = "2", dosedown = "05")
 ```
 
-```{r miltiplot, fig.height=15, fig.width=12}
+```{r multiplot, fig.height=15, fig.width=12}
 grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2, main = "Differences of lengths for different doses of same delivery methods")
 ```
 
@@ -178,8 +178,6 @@ toothnormalplotsd <- function(mydf, bin, suppup, suppdown, dose) {
         return(g1)
         detach(mydf)
 }
-
-
 ```
 
 ```{r difference plots different delivery method, message=FALSE}
@@ -225,7 +223,7 @@ tplot <- function(dof, tstat, conflev, two = TRUE) {
 
 Now let's perform the tests. As R provide a function to perform t test for paired samples, I am not going to use anymore the `myToothGrowth_diff` dataframe, instead i will use the `myToothGrowth3` one.
 
-For every single difference vector I wnat to test, i will provide a plot and a comment. Looking at the plot remember that the red line represents the rejection region, while the blue one is the t statistics result of the test.
+For every single difference vector I want to test, i will provide a plot and a comment. Looking at the plot remember that the red line represents the rejection region, while the blue one is the t statistics result of the test.
 
 The alternative hypothesis will be *greater* per different doses of same delivery method, and *two.sided* for same dose of different delivery methods. The confidence level is $0.95$.
 
