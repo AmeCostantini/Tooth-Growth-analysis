@@ -23,7 +23,7 @@
 
 * creating plots (maybe with a function) related to tests (see http://www.statmethods.net/advgraphs/probability.html for further help) `v`
 
-* drawing conclusions.
+* drawing conclusions (ricorda che alcuni istogrammi delle differenze non erano normali. test meno attendibile).
 
 ###Review
 
