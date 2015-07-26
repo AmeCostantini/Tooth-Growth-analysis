@@ -21,7 +21,7 @@ require(gridExtra)
 ```
 
 ##Goals
-We're going to analyze the ToothGrowth data in the R datasets package to perform some basic exploratory data analyses.
+We're going to analyze the `ToothGrowth` data in the R datasets package to perform some basic exploratory data analysis.
 Goals are to:
 
 * provide a basic summary of the data;
@@ -42,9 +42,7 @@ myToothGrowth <- ToothGrowth
 
 ##Exploratory data analysis
 
-How delivery methods and doses are distributed? There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one.
-
-There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one. My assumption (*I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one*) seem confirmed by the plot that you can find at the appendix ($plot1$). I also want to take a look at the **distribution of lengths** ($plot2$ of appendix) but I don't know if this kind of exploration makes sense, because this 60 observations are not really *a population*, are much more the sum of 6 different "snapshot"" of a population. So probably the best plot to look at is $plot3$ of appendix, where it seems that dose influences the growth of lenghts (very expected!) and that ascorbic acide is more effective than orange juice in facilitate this.
+How delivery methods and doses are distributed? There is not a column dedicated to the ID of the ten pigs, so I assume that the measurements are ordered this way: each ten observations represents a dose of vitamin, the first 30 with a delivery methods and the second 30 with the other one. My assumption seems confirmed by the plot that you can find at the appendix ($plot1$). I also want to take a look at the **distribution of lengths** ($plot2$ of appendix) but I don't know if this kind of exploration makes sense, because this 60 observations are not really *a population*, are much more the union of 6 different "snapshot"" of a population. So probably the best plot to look at is $plot3$ of appendix, where it seems that dose influences the growth of lengths (very expected!).
 Almost all population are quiete symmetrical, which is good for our further analysis. **Infact we are deailing with paired small samples**, so it's likely we are going to use t-test to compare groups, and t-test needs quite normal population to be accurate. Of course we can't check the normality of population (unless we use some tools that were not taugth in the class, but students have been explicitly discouraged in doing so), so we must perform analysis on these small samples. Furthermore, being paired samples, it's better to plot the differences between lengths, as we will test them with the `t distribution`. I will do this in the `statistical analysis` chapter, after some data manipulation.
 
 ##Data manipulation
@@ -72,13 +70,13 @@ head(myToothGrowth3, n = 1)
 
 ##Statistical analysis
 
-As seen before, we are dealing witg 6 measurements on 10 subjects. These measurements were taken in 2 different conditions, let'say: *Orange juice* and *Ascorbic acid*. So we must be very careful in comparing two measurements belonging to different conditions. My idea is:
+As seen before, we are dealing with 6 measurements on 10 subjects. These measurements were taken in 2 different conditions, let's say: *Orange juice* and *Ascorbic acid*. So we must be very careful in comparing two measurements belonging to different conditions. My idea is:
 
-* to compare lengths derived from different doses given with the same delivery method, to see if bigger dose (as we expect) related to bigger length;
-* to compare same doses given with different delivery methods, to see if different delivery method relates to different length (looking at the boxplots, i think it worth considering the dose 0.5 and 1, which seems the ones with bigger difference between lengths distributions and their averages).
+* to compare lengths originated from different doses given with the same delivery method, to see if bigger dose (as we expect) related to bigger length;
+* to compare same dose given with different delivery methods, to see if different delivery method relates to different length (looking at the boxplots, i think it worth considering the dose 0.5 and 1, which seems the ones with bigger difference between lengths distributions and their averages).
 
 ###Verification of normality assumptions
-But first of all I need to perform some check on normality of differences, although the size is very very small. I will create a dataframe of the differences between all the vectors I aim to compare.Naming convention is: `VC_1_05 = supp VC dose 1 - supp Vc dose 0.5` and `VC_OJ_05 = supp OJ - supp VC for dose 2`. At the appendix $plot4$ shows differences between lenghts derived by different doses of same delivery method, and they are almost all quite normal, and considering that T test in quite robust to the normality assumtpions, we can be happy wity this results. 
+But first of all I need to perform some check on normality of differences, although the size is very very small. I will create a dataframe of the differences between all the vectors I aim to compare.Naming convention is: `VC_1_05 = supp VC dose 1 - supp Vc dose 0.5` and `VC_OJ_05 = supp OJ - supp VC for dose 2`. At the appendix $plot4$ shows differences between lenghts originated from different doses of same delivery method, and they are almost all quite normal, and considering that T test is robust to the normality assumption, we can be happy with this results. 
 
 ```{r difference dataframe, echo=FALSE, results='hide'}
 myToothGrowth_diff <- data.frame (
@@ -117,7 +115,7 @@ g5 <- toothnormalplot(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = 
 g6 <- toothnormalplot(mydf = myToothGrowth_diff, bin = 3, supp = "OJ", doseup = "2", dosedown = "05")
 ```
 
-Now we should alo plot the differences for same dose but different delivery method. At the appendix you find $plot5$ where you can see that really only dose 0.5 is far away from normality. We can go through the test now.
+Now we should also plot the differences for same dose but different delivery method. At the appendix you find $plot5$ where you can see that really only dose 0.5 is far away from normality. We can go through the test now.
 
 ```{r differences plot sd function, echo=FALSE, results='hide'}
 #function for plotting the differences for same dose but different same delivery methods
@@ -166,7 +164,7 @@ tplot <- function(dof, tstat, conflev, two = TRUE) {
 }
 ```
 
-Now let's perform the tests. As R provide a function to perform t test for paired samples. I separate `t test`results in the ones related to different doses given by same delivery methods, and the ones related to same doses of different delivery methods.
+Now let's perform the tests. R provide a function to perform t test for paired samples. I separate `t test`results in the ones related to different doses given by same delivery methods, and the ones related to same dose of different delivery method.
 
 ####Different doses but same delivery method
 
@@ -220,11 +218,11 @@ tOJ_1_05 = tOJ_1_05$p.value)
 p.value_test_same_method
 ```
 
-All p-values are significantly lower than level of confidence alpha = 0.5. I would not put in doubt the results of the test in light of the non-perfect normality of differences, so for all the six tests ***null hypothesis is rejected***. This means that as dose increase the lengths of teeth, on average, increases (we are confident on these at 0.95, of course). You can take a look at results of the test at $plot 6$ where the red line represents the borders of rejection region and the blue one the actaul t statistic for that test.
+All p-values are significantly lower than level of confidence alpha = 0.05. I would not put in doubt the results of the test in light of the non-perfect normality of differences, so for all the six tests ***null hypothesis is rejected***. This means that ,as dose increases, the lengths of teeth, on average, increases (we are confident on these at 0.95, of course). You can take a look at results of the test at $plot 6$ where the red line represents the borders of rejection region and the blue one is the actual t statistic for that test.
 
 ####Same dose of different delivery method
 
-Naming convention is: **t_VC_OJ_2 = t test on the difference between lengths derived from dose 2 given with orange juice and given with ascorbic acid **
+Naming convention is: **t_VC_OJ_2 = t test on the difference between lengths originated from dose 2 given with orange juice and given with ascorbic acid **
 
 Always:
 
@@ -259,9 +257,14 @@ t_VC_OJ_05 = t_VC_OJ_05$p.value)
 p.value_test_diff_method
 ```
 
-For dose 2 t test has a huge p-value: of course **null hypothesis is not rejected** , and we can be confident in saying tha no difference (on average) in lenghts are due to different method if dose is two. This is not true for the other doses, where **null hypothesis is rejected**, although the non normality of differences for dose 0.5 make me doubtfoul about the results of the test.
+For dose 2 t test has a huge p-value: of course **null hypothesis is not rejected** , and we can be confident in saying that no difference (on average) in lengths are due to different method if dose is 2. This is not true for the other doses, where **null hypothesis is rejected**, although the non normality of differences for dose 0.5 make me doubtful about the results of the test.
 
 ##Conclusions
+Our t test reveals basically two things:
+
+1. **bigger dose, bigger length**, but: in the context of the single delivery method, ascorbic acid enables a bigger effectiveness of dose: you see this in the higher values of the t statistics in the tests and also in the conditional boxplot of $plot3$, where there is bigger distance between the box of lengths originated from the 3 doses.
+
+2. Giving the same dose with two different delivery methods generates, for dose 0.5 and 1, a difference in the length that, in average, is greater than 0: **orange juice generates bigger length**. The same things is understandable from the conditional boxplots, where orange juice is, in two out ot three cases, higher than ascorbic acid.
 
 
 
@@ -347,7 +350,3 @@ t_VC_OJ_05.plot <- tplot(dof = 9, tstat = t_VC_OJ_05$statistic, conflev = 0.95, 
 grid.arrange(tVC_2_05.plot, tVC_2_1.plot, tVC_1_05.plot, tOJ_2_05.plot, tOJ_2_1.plot, tOJ_1_05.plot, t_VC_OJ_2.plot, 
              t_VC_OJ_1.plot, t_VC_OJ_05.plot, ncol = 3, main = "T TESTS")
 ```
-
-ora copio i 6 grafici senza stampare poi riunisco.
-
-vedi to do su github. inoltre stampi html su browser e poi pdf. grazie a analisi draft faccio commenti, poi la pubblico si rpubs.

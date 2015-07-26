@@ -377,4 +377,11 @@ Alos for dose 0.5 t statistic is higher than critical value, so **the null hypot
 
 ##Conclusions
 
+Our t test reveals basically two things:
+
+1. **bigger dose, bigger average difference of lengths**, but: in the context of the single delivery method, ascorbic acid enables a bigger effectiveness of dose: you see this in the higher values of the t statistics in the tests and also in the conditional boxplot of $plot3$, where there is bigger distance between the means of lengths derived from the 3 doses.
+
+2. Giving the same dose with two different delivery methods generates, for doe 0.5 and 1, different average difference of lengths: **orange juice generates a higher average difference**. The same things is understandable from the conditional boxplot, where orange juice is, in two out ot three cases, higher than acorbic acid.
+
+
 ascorbic acid da più potere alla dose di orange juice.
