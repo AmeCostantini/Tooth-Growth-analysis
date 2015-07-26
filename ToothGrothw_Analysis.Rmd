@@ -2,7 +2,7 @@
 title: "Tooth Growth Analysis"
 author: "Americo"
 date: "19 luglio 2015"
-output: pdf_document
+output: html_document
 ---
 
 ```{r wd, echo = FALSE, message=FALSE}
@@ -154,13 +154,13 @@ tplot <- function(dof, tstat, conflev, two = TRUE) {
                 g1 <- ggplot(mydf, aes(myx, myy)) +
                 geom_line(size = 1.2, colour = "black") +
                 geom_vline(xintercept = c(-tcrit, tcrit, tstat), colour = c("red", "red", "blue"), size = 0.9) +
-                ggtitle(paste("Hypothesis testing for t =", tstat ))
+                ggtitle(paste("Hypothesis testing for t =", round(tstat,2) ))
         return(g1)
         } else {
                 g2 <- ggplot(mydf, aes(myx, myy)) +
                 geom_line(size = 1.2, colour = "black") +
                 geom_vline(xintercept = c(tcrit, tstat), colour = c("red", "blue"), size = 0.9) +
-                ggtitle(paste("Hypothesis testing for t =", tstat ))
+                ggtitle(paste("Hypothesis testing for t =", round(tstat,2) ))
                 return(g2)
         }
 }
@@ -269,16 +269,16 @@ For dose 2 t test has a huge p-value: of course **null hypothesis is not rejecte
 
 ##Plot1
 
-```{r barcharts, fig.height=3, fig.width=3, echo=FALSE}
+```{r barcharts, fig.height=2.8, fig.width=6, echo=FALSE}
 ggplot(data = myToothGrowth, aes(x = supp, fill = factor(dose))) +
         geom_bar(width = 0.5) +
         guides(fill=guide_legend(reverse=TRUE)) +
         ggtitle("distribution of doses and delivery methods")
 ```
 
-##PLot2
+##Plot2
 
-```{r first histogram, fig.height=3, fig.width=7.5, echo=FALSE}
+```{r first histogram, fig.height=2.8, fig.width=7.5, echo=FALSE}
 ggplot(data = myToothGrowth, aes(x = len)) +
                geom_histogram(binwidth = 1, colour = "black", fill = "gray") +
         ggtitle("Histogram of teeth length")
@@ -286,7 +286,7 @@ ggplot(data = myToothGrowth, aes(x = len)) +
 
 ##Plot3
 
-```{r conditional boxplots, fig.height=3.5, fig.width=7.5, echo=FALSE}
+```{r conditional boxplots, fig.height=3, fig.width=7.5, echo=FALSE}
 ggplot(data = myToothGrowth, aes(x = factor(dose), y = len)) +
         geom_boxplot() +
         facet_wrap(~supp) +
@@ -301,11 +301,53 @@ grid.arrange(g1, g2, g3, g4, g5, g6, ncol = 2, main = "Differences of lengths fo
 
 ##Plot5
 
-```{r multiplot difference plots different delivery method, fig.height=12, fig.width=12}
+```{r multiplot difference plots different delivery method, echo=FALSE, fig.height=6, fig.width=10}
 grid.arrange(gsd1, gsd2, gsd3, ncol = 1, main = "Differences of lengths for same dose of different delivery method")
 ```
 
-non funziona la centratura dei grafici
 ##Plot6
 
-vedi to do su github
+```{r plot test Ascorbic acid: dose 2 and 0.5, fig.height=2, fig.width=3, echo=FALSE}
+tVC_2_05.plot <- tplot(dof = 9, tstat = tVC_2_05$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test Ascorbic acid: dose 2 and 1, fig.fig.height=2, fig.width=3, echo=FALSE}
+tVC_2_1.plot <- tplot(dof = 9, tstat = tVC_2_1$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test Ascorbic acid: dose 1 and 0.5, fig.height=2, fig.width=3, echo=FALSE}
+tVC_1_05.plot <- tplot(dof = 9, tstat = tVC_1_05$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test Orange juice: dose 2 and 0.5, fig.height=2, fig.width=3, echo=FALSE}
+tOJ_2_05.plot <- tplot(dof = 9, tstat = tOJ_2_05$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test Orange juice: dose 2 and 1, fig.height=2, fig.width=3, echo=FALSE}
+tOJ_2_1.plot <- tplot(dof = 9, tstat = tOJ_2_1$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test Orange juice: dose 1 and 0.5, fig.height=2, fig.width=3, echo=FALSE}
+tOJ_1_05.plot <- tplot(dof = 9, tstat = tOJ_1_05$statistic, conflev = 0.95, two = FALSE)
+```
+
+```{r plot test diff meth dose 2, fig.height=2, fig.width=3, echo=FALSE}
+t_VC_OJ_2.plot <- tplot(dof = 9, tstat = t_VC_OJ_2$statistic, conflev = 0.95, two = TRUE)
+```
+
+```{r plot test diff meth dose 1, fig.height=2, fig.width=3, echo=FALSE}
+t_VC_OJ_1.plot <- tplot(dof = 9, tstat = t_VC_OJ_1$statistic, conflev = 0.95, two = TRUE)
+```
+
+```{r plot test diff meth dose 05, fig.height=2, fig.width=3, echo=FALSE}
+t_VC_OJ_05.plot <- tplot(dof = 9, tstat = t_VC_OJ_05$statistic, conflev = 0.95, two = TRUE)
+```
+
+```{r def multiplot t tests, fig.height=6, fig.width=12, echo=FALSE}
+grid.arrange(tVC_2_05.plot, tVC_2_1.plot, tVC_1_05.plot, tOJ_2_05.plot, tOJ_2_1.plot, tOJ_1_05.plot, t_VC_OJ_2.plot, 
+             t_VC_OJ_1.plot, t_VC_OJ_05.plot, ncol = 3, main = "T TESTS")
+```
+
+ora copio i 6 grafici senza stampare poi riunisco.
+
+vedi to do su github. inoltre stampi html su browser e poi pdf. grazie a analisi draft faccio commenti, poi la pubblico si rpubs.
